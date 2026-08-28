@@ -1,2 +1,4 @@
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://whatud.github.io/munzzi-freeclass/sitemap.xml
