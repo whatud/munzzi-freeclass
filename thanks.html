@@ -38,6 +38,7 @@
 }
 :root{
   --naver:#03C75A;
+  --naver-t:#01803C;              /* 흰 배경 위 글자용 초록 (대비 5.05:1) */
   --kakao:#FEE500; --kakao-d:#F2D900;
   --ink:#121212; --ink-2:#4E5968; --ink-3:#8B95A1;
   --paper:#FFFFFF; --soft:#F5F6F7; --rule:#E5E8EB;
@@ -52,6 +53,7 @@ body{
   min-height:100vh; min-height:100dvh;
   display:flex; align-items:center; justify-content:center;
   padding:1.5rem 1.25rem;
+  word-break:keep-all; overflow-wrap:break-word;
 }
 @media (min-width:768px){ body{font-size:18px} }
 
@@ -84,7 +86,7 @@ body{
 
 .eyebrow{
   display:inline-block; font-size:.9375rem; font-weight:700;
-  color:var(--naver); letter-spacing:-.02em; margin-bottom:.65rem;
+  color:var(--naver-t); letter-spacing:-.02em; margin-bottom:.65rem;
 }
 h1{
   font-family:var(--title); font-weight:400;
@@ -92,7 +94,7 @@ h1{
   word-break:keep-all;
 }
 @media (min-width:768px){ h1{font-size:1.75rem} }
-h1 .date{color:var(--naver)}
+h1 .date{color:var(--naver-t)}
 
 .divider{height:1px;background:var(--rule);margin:1.75rem 0 1.5rem}
 
@@ -113,6 +115,7 @@ h1 .date{color:var(--naver)}
 }
 .btn:hover{background:var(--kakao-d)}
 .btn:active{transform:scale(.985)}
+.btn:focus-visible{outline:3px solid #1E1E1E;outline-offset:2px}
 .btn svg{width:1.35rem;height:1.35rem;flex:0 0 auto}
 
 .note{
@@ -121,10 +124,10 @@ h1 .date{color:var(--naver)}
 }
 .sub{
   margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--rule);
-  font-size:.9375rem; line-height:1.65; color:var(--ink-3); font-weight:500;
+  font-size:.9375rem; line-height:1.65; color:var(--ink-2); font-weight:500;
   word-break:keep-all;
 }
-.sub a{color:var(--ink-3)}
+.sub a{color:inherit;text-decoration:underline}
 </style>
 </head>
 <body>
@@ -157,7 +160,17 @@ h1 .date{color:var(--naver)}
 <script>
 (function(){
   var CFG = window.LP_CONFIG || {};
-  function track(n,p){ p=p||{}; if(window.gtag) window.gtag('event',n,p); }
+  /* 신청 유입 채널(RS 정산용)을 완료 페이지 이벤트에도 함께 싣는다.
+     랜딩(index.html)의 track() 과 파라미터 이름이 같아야 GA4에서 한 측정기준으로 이어진다. */
+  var ATTR={};
+  try{ ATTR = JSON.parse(localStorage.getItem('lp_attr')||'{}') || {}; }catch(e){}
+  function track(n,p){
+    p=p||{};
+    p.attr_source   = ATTR.utm_source||'';
+    p.attr_medium   = ATTR.utm_medium||'';
+    p.attr_campaign = ATTR.utm_campaign||'';
+    if(window.gtag) window.gtag('event',n,p);
+  }
 
   /* 특강 일시 라벨은 CFG 한 곳에서 관리 */
   if(CFG.CLASS_DATE_LABEL_SHORT){
@@ -168,19 +181,9 @@ h1 .date{color:var(--naver)}
   var btn = document.getElementById('chatBtn');
   if(CFG.OPENCHAT_URL) btn.href = CFG.OPENCHAT_URL;
 
-  /* 신청 유입 채널(RS 정산용)을 완료 페이지에서도 함께 남긴다 */
-  var attr={};
-  try{ attr = JSON.parse(localStorage.getItem('lp_attr')||'{}') || {}; }catch(e){}
+  track('signup_complete_view');
 
-  track('signup_complete_view', {
-    utm_source: attr.utm_source||'', utm_medium: attr.utm_medium||'', utm_campaign: attr.utm_campaign||''
-  });
-
-  btn.addEventListener('click', function(){
-    track('join_openchat', {
-      utm_source: attr.utm_source||'', utm_medium: attr.utm_medium||'', utm_campaign: attr.utm_campaign||''
-    });
-  });
+  btn.addEventListener('click', function(){ track('join_openchat'); });
 })();
 </script>
 </body>

@@ -60,6 +60,7 @@
 <style>
 :root{
   --naver:#03C75A; --naver-d:#02B350; --naver-dd:#019646;
+  --naver-t:#01803C;                /* 흰 배경 위 글자용 초록 (대비 5.05:1) */
   --naver-pale:#E6F9EF; --naver-pale2:#CFF2E0;
   --ink:#121212; --ink-2:#4E5968; --ink-3:#8B95A1;
   --paper:#FFFFFF; --soft:#F5F6F7;
@@ -168,7 +169,9 @@ strong{font-weight:900}
 /* ============ 후기 벽 ============ */
 .reviews{display:flex;flex-direction:column;gap:1rem;margin:1.5rem 0}
 /* ============ form ============ */
-.formcard{background:#fff;border-radius:16px;padding:1.5rem 1.25rem;border:1px solid var(--rule);box-shadow:0 4px 24px rgba(18,18,18,.09)}
+.formcard{background:#fff;color:var(--ink);border-radius:16px;padding:1.5rem 1.25rem;border:1px solid var(--rule);box-shadow:0 4px 24px rgba(18,18,18,.09)}
+/* 어두운 섹션 안에 있어도 카드는 흰 배경이므로 글자색을 되돌린다 */
+.sec.dark .formcard h2,.sec.dark .formcard h3{color:var(--ink)}
 @media (min-width:768px){ .formcard{padding:1.75rem 1.5rem} }
 .formcard h3{font-size:1.25rem;margin-bottom:.2rem}
 .formcard .fdesc{font-size:1.0625rem;color:var(--ink-3);margin-bottom:1.15rem;font-weight:700;line-height:1.5}
@@ -193,10 +196,10 @@ input:focus,select:focus{outline:0;border-color:var(--naver);box-shadow:0 0 0 3p
 .agree label{display:inline;font-size:inherit;font-weight:500;margin:0}
 .agree .all label{font-weight:900}
 .agree-note{font-size:.8125rem;color:var(--ink-3);margin-top:.55rem;line-height:1.5;font-weight:500;margin-bottom:0}
-.done{display:none;text-align:center;padding:1.5rem 0}
-.done .big{font-size:1.375rem;font-weight:900;margin-bottom:.5rem}
+.done{display:none;text-align:center;padding:1.5rem 0;word-break:keep-all;overflow-wrap:break-word}
+.done .big{font-size:1.375rem;font-weight:900;margin-bottom:.5rem;color:var(--ink)}
 .done p{font-size:1.125rem;color:var(--ink-2);font-weight:500}
-.done a{color:var(--naver);font-weight:700;text-decoration:underline}
+.done a{color:var(--naver-t);font-weight:700;text-decoration:underline;white-space:nowrap}
 .count{background:var(--ink);color:#fff;border-radius:12px;padding:.85rem;text-align:center;margin-bottom:1rem}
 .count .lab{font-size:1rem;font-weight:900;color:var(--naver);margin-bottom:.25rem}
 .count .t{font-size:1.375rem;font-weight:900;letter-spacing:-.04em}
@@ -1898,7 +1901,7 @@ summary{font-size:1.1875rem}
 
      규칙: UTM이 붙은 첫 방문을 기여 채널로 고정한다(first-touch).
            단, 기존 기록이 direct/referral 뿐이면 UTM 방문이 그 자리를 가져간다. */
-  var UTM_KEYS=['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  var UTM_KEYS=['utm_source','utm_medium','utm_campaign','utm_content'];
   var ATTR_KEY='lp_attr';
   var ATTR_TTL=90*864e5;   /* 90일 */
 
@@ -1967,7 +1970,18 @@ summary{font-size:1.1875rem}
     };
   }
 
-  function track(n,p){ p=p||{}; if(window.gtag) window.gtag('event',n,p); if(window.LP_DEBUG) console.log('[track]',n,p); }
+  /* GA4로 나가는 모든 이벤트에 귀속 채널을 함께 싣는다.
+     이걸 안 붙이면 시트에는 채널이 남아도 GA4에서는 '어느 채널이 몇 명 신청시켰나'를 못 본다.
+     이름을 utm_* 가 아니라 attr_* 로 쓰는 이유: GA4 기본 캠페인 측정기준(세션 단위 last-click)과
+     우리 규칙(90일 first-touch)은 값이 다르다. 같은 이름을 쓰면 보고서에서 둘을 혼동한다. */
+  function track(n,p){
+    p=p||{};
+    p.attr_source   = ATTR.utm_source||'';
+    p.attr_medium   = ATTR.utm_medium||'';
+    p.attr_campaign = ATTR.utm_campaign||'';
+    if(window.gtag) window.gtag('event',n,p);
+    if(window.LP_DEBUG) console.log('[track]',n,p);
+  }
 
   (function(){
     var t = CFG.CLASS_DATE_LABEL
