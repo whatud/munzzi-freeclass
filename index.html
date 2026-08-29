@@ -1080,6 +1080,21 @@ summary{font-size:1.1875rem}
 .ask{font-size:1.1875rem}
 .disclaimer{font-size:.9375rem}
 
+/* --- 6g. 무.조.건 강조 블록 --- */
+.claim{margin:0 0 1.5rem;text-align:left}
+.claim-q{font-size:1.25rem;font-weight:900;color:var(--ink-2);margin-bottom:.3rem}
+.claim-word{
+  font-family:var(--title);font-size:4.25rem;font-weight:900;
+  color:var(--naver-t);line-height:1;letter-spacing:.02em;margin:.15rem 0 .35rem;
+}
+.claim-word i{font-style:normal;color:var(--ink-3);margin:0 .05em}
+.claim-a{font-size:1.75rem;font-weight:900;color:var(--ink);word-break:keep-all}
+@media (min-width:768px){ .claim-word{font-size:5.5rem} .claim-a{font-size:2.125rem} }
+
+/* 두 흰 섹션이 이어질 때 공백이 커 보이는 걸 좁힌다 */
+[data-section="math"]{padding-bottom:2rem}
+[data-section="what"]{padding-top:2rem}
+
 /* --- 6d. 섹션 안 인물 누끼 (어두운 배경에 녹인다) --- */
 .in-cut{
   display:block;width:min(58%,13.5rem);height:auto;
@@ -1282,8 +1297,7 @@ summary{font-size:1.1875rem}
 
     <div class="winrow">
       <div class="win"><span class="who">지난 두 달</span><span class="what"><em>2,230만원</em></span></div>
-      <div class="win"><span class="who">계약 중</span><span class="what">업체 <em>7곳</em></span></div>
-      <div class="win"><span class="who">영상 한 편</span><span class="what"><em>8만원</em></span></div>
+      <div class="win"><span class="who">대행 채널 수</span><span class="what"><em>120개+</em></span></div>
     </div>
 
     <div class="hero-cta mobile-form">
@@ -1402,8 +1416,11 @@ summary{font-size:1.1875rem}
 
 <section class="sec" data-section="what" data-order="5">
   <div class="sec-inner rv">
-    <span class="eyebrow">부업 처음이면</span>
-    <h2>대행으로<br><span class="g">시작하세요</span></h2>
+    <div class="claim">
+      <p class="claim-q">부업 처음이라면?</p>
+      <p class="claim-word gl">무<i>.</i>조<i>.</i>건</p>
+      <p class="claim-a">대행으로 시작하세요.</p>
+    </div>
     <p class="lead">
       업체 영상을 대신 만들어주고<br>돈을 받으면 돼요.<br>구독자도 팔로워도 없어도 되고요.
     </p>
@@ -1416,6 +1433,28 @@ summary{font-size:1.1875rem}
       <figcaption class="ev-label">계약서 보내고 확인받는 중<br><em>이 대화 뒤에 200만원 입금</em></figcaption>
     </figure>
 
+    <!-- ▼ 릴스 영상 자리 — 영상 도착 전까지 숨김.
+         도착하면 이 div의 style="display:none" 한 줄만 지우고,
+         두 <video> 의 src를 실제 mp4 경로로 바꾸면 됩니다.
+         잘 터진 쪽 / 조회수 낮은 쪽을 알려주시면 라벨도 채워 넣습니다. -->
+    <div class="reels-slot" style="display:none">
+      <p class="lead" style="margin-top:2rem;font-weight:900;color:var(--ink)">
+        실제로 납품한 영상이에요.
+      </p>
+      <div class="reels">
+        <figure class="ev">
+          <video src="assets/video/reel_1.mp4" muted loop playsinline preload="none" data-autoplay
+                 width="500" height="889"></video>
+          <figcaption class="ev-label">&lt;조회수 라벨 1&gt;</figcaption>
+        </figure>
+        <figure class="ev">
+          <video src="assets/video/reel_2.mp4" muted loop playsinline preload="none" data-autoplay
+                 width="500" height="889"></video>
+          <figcaption class="ev-label">&lt;조회수 라벨 2&gt;</figcaption>
+        </figure>
+      </div>
+      <p class="reel-note" style="font-weight:900;color:var(--ink);text-align:center">받은 돈은 똑같아요.</p>
+    </div>
 
     <!-- ★ 다리⑤ 위험 제거 — 초보가 대행을 먼저 해야 하는 이유 -->
     <p class="lead" style="margin-top:2rem;font-weight:900;color:var(--ink)">
@@ -1857,7 +1896,6 @@ summary{font-size:1.1875rem}
       <details><summary>하루에 얼마나 걸리나요</summary><div class="ans">업체 하나당 일주일에 하루, 1~2시간이면 돼요. 익숙해지면 한 편에 두세 시간이면 나와요.</div></details>
       <details><summary>일은 어디서 구하나요</summary><div class="ans">그날 다 알려드릴게요. 제가 실제로 일 받는 경로랑, 업체에 먼저 연락하는 방법까지 그대로 열어요.</div></details>
       <details><summary>요즘 AI가 다 하는데 오래갈까요</summary><div class="ans">AI가 못 하는 게 사람 연결하고 설득하는 일이에요. 그게 이 일의 핵심이고요.</div></details>
-      <details><summary>휴대폰으로 들어도 되나요</summary><div class="ans">노트북이나 컴퓨터로 들어오셔야 해요. 제 화면 같이 보면서 진행하는 부분이 많아서, 휴대폰으론 글씨가 작아 따라오기 어려워요.</div></details>
       <details><summary>몇 시에 끝나나요</summary><div class="ans">저녁 7시 30분에 시작해요. 끝나는 시간은 안 정해뒀어요. 질문 남아 있으면 답 다 드리고 마칩니다. 그날 저녁은 넉넉히 비워두세요!</div></details>
       <details><summary>정말 무료인가요</summary><div class="ans">네! 신청비도 없고 결제 단계도 없어요. 그날 오시면 자료 3종까지 받아 가세요.</div></details>
     </div>
@@ -1872,7 +1910,6 @@ summary{font-size:1.1875rem}
     <div class="formcard" id="formcard-bottom">
       <h3>무료 특강 신청</h3>
       <p class="fdesc" data-schedule>온라인 라이브</p>
-      <p class="need">💻 <b>노트북이나 컴퓨터</b>로 들어오셔야 해요. 휴대폰으론 따라오기 어려워요.</p>
       <form class="applyForm" data-form="bottom" novalidate>
         <div class="field f-name">
           <label>이름 <span class="req">*</span></label>
@@ -1922,7 +1959,6 @@ summary{font-size:1.1875rem}
       </div>
       <h3>무료 특강 신청</h3>
       <p class="fdesc" data-schedule>온라인 라이브</p>
-      <p class="need">💻 <b>노트북이나 컴퓨터</b>로 들어오셔야 해요. 휴대폰으론 따라오기 어려워요.</p>
       <form class="applyForm" data-form="top" novalidate>
         <div class="field f-name">
           <label>이름 <span class="req">*</span></label>
