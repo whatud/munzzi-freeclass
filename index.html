@@ -125,9 +125,35 @@ p:last-child{margin-bottom:0}
 strong{font-weight:900}
 
 /* ============ hero ============ */
-.hero{background:var(--dark);color:#fff;padding:2.5rem 0 2.75rem;position:relative;overflow:hidden}
+.hero{background:var(--dark);color:#fff;padding:1.6rem 0 2.25rem;position:relative;overflow:hidden}
+/* 첫 화면에 CTA 까지 들어와야 한다. 히어로 내부 간격은 여기서 조인다 */
+.hero .eye{margin-bottom:.75rem}
+.hero .winrow{gap:.4rem;margin-bottom:1.1rem}
+.hero .win{padding:.62rem .95rem}
 @media (min-width:1240px){ .hero{padding:3.5rem 0 4.5rem} }
-.hero .glow{position:absolute;width:32rem;height:32rem;border-radius:50%;background:radial-gradient(circle,rgba(3,199,90,.18),transparent 62%);top:-14rem;right:-12rem;pointer-events:none}
+.hero .glow{position:absolute;width:32rem;height:32rem;border-radius:50%;background:radial-gradient(circle,rgba(3,199,90,.18),transparent 62%);top:-14rem;right:-12rem;pointer-events:none;animation:glowdrift 14s ease-in-out infinite}
+@keyframes glowdrift{
+  0%,100%{transform:translate(0,0) scale(1);opacity:1}
+  50%{transform:translate(-3rem,2.5rem) scale(1.14);opacity:.82}
+}
+/* 날짜 배지 점멸 — 첫 화면에서 일정으로 눈이 먼저 가게 */
+.hero .eye::before{
+  content:"";width:.5rem;height:.5rem;border-radius:50%;
+  background:var(--naver);flex:none;animation:eyeblink 1.6s ease-in-out infinite;
+}
+@keyframes eyeblink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.75)}}
+/* 증거 3칸이 차례로 올라온다 */
+.hero .win{animation:winup .55s ease both}
+.hero .win:nth-child(1){animation-delay:.15s}
+.hero .win:nth-child(2){animation-delay:.3s}
+.hero .win:nth-child(3){animation-delay:.45s}
+@keyframes winup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+/* 신청 버튼 숨쉬기 */
+.hero .btn{animation:ctapulse 2.6s ease-in-out infinite}
+@keyframes ctapulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(3,199,90,.42)}
+  60%{box-shadow:0 0 0 .85rem rgba(3,199,90,0)}
+}
 .hero .eye{
   position:relative;display:inline-flex;align-items:center;gap:.4rem;
   background:rgba(3,199,90,.16);color:var(--naver);
@@ -135,15 +161,15 @@ strong{font-weight:900}
 }
 .hero h1{
   position:relative;font-size:clamp(3.5rem,18.2vw,5.5rem);font-weight:900;line-height:1.06;
-  letter-spacing:-.06em;color:#fff;margin-bottom:1.1rem;word-break:keep-all;
+  letter-spacing:-.075em;color:#fff;margin-bottom:.8rem;word-break:keep-all;
 }
 .hero h1 .g{color:var(--naver)}
-.hero .sub{position:relative;font-size:1.1875rem;color:#B8B8B8;font-weight:700;line-height:1.6;margin-bottom:1.75rem}
+.hero .sub{position:relative;font-size:1.1875rem;color:#B8B8B8;font-weight:700;line-height:1.55;margin-bottom:1.2rem}
 .hero .sub b{color:#fff;font-weight:900}
 /* 킥 — 확정 축(현역)을 첫 화면에 못 박는 한 줄 */
 .hero .kick{
   position:relative;font-size:.9375rem;font-weight:900;color:#8B8B8B;
-  letter-spacing:-.03em;margin-bottom:.55rem;
+  letter-spacing:-.03em;margin-bottom:.4rem;
 }
 /* 인물 누끼 — CTA 아래 띠. 히어로 바닥에 걸쳐 배경으로 사라지게 */
 .hero .wrap{position:relative;z-index:2}
@@ -1042,6 +1068,41 @@ summary{font-size:1.1875rem}
 .ask{font-size:1.1875rem}
 .disclaimer{font-size:.9375rem}
 
+/* --- 6d. 섹션 안 인물 누끼 (어두운 배경에 녹인다) --- */
+.in-cut{
+  display:block;width:min(58%,13.5rem);height:auto;
+  margin:.25rem auto -.5rem;pointer-events:none;user-select:none;
+  -webkit-mask-image:linear-gradient(180deg,#000 60%,transparent 96%);
+          mask-image:linear-gradient(180deg,#000 60%,transparent 96%);
+}
+@media (min-width:768px){ .in-cut{width:16rem} }
+
+/* --- 6e. 시급 박스 --- */
+.hourbox{
+  border:2px solid var(--naver);border-radius:18px;
+  padding:1.4rem 1.2rem;margin:1.75rem 0;text-align:center;
+  background:var(--naver-pale);
+}
+.hb-t{font-size:1.1875rem;font-weight:700;color:var(--ink-2);line-height:1.55;word-break:keep-all}
+.hb-t b{color:var(--ink);font-weight:900}
+.hb-num{
+  font-family:var(--title);font-size:2.5rem;font-weight:900;
+  color:var(--naver-t);margin-top:.6rem;letter-spacing:-.04em;
+}
+.hb-num span{font-size:3.25rem;text-shadow:0 0 22px rgba(3,199,90,.35)}
+@media (min-width:768px){ .hb-num{font-size:3rem} .hb-num span{font-size:4rem} }
+
+/* --- 6f. 3D 아이콘을 얹은 질문 --- */
+.qwrap{position:relative;text-align:center;margin:3.25rem 0 1rem}
+.q-ico{
+  display:block;width:6.5rem;height:auto;margin:0 auto .35rem;
+  filter:drop-shadow(0 14px 22px rgba(0,0,0,.22));
+  animation:qbob 3.2s ease-in-out infinite;
+}
+@keyframes qbob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-9px) rotate(5deg)}}
+.qwrap .q-big{margin-top:0}
+@media (min-width:768px){ .q-ico{width:8.5rem} }
+
 /* --- 6c. 일상 사진 2열 --- */
 .photo2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:1.25rem 0 .5rem}
 .photo2 img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/5;border-radius:14px;display:block}
@@ -1198,9 +1259,9 @@ summary{font-size:1.1875rem}
   <span class="glow"></span>
   <div class="wrap">
     <span class="eye" data-date-badge>9월 15일 (화) 저녁 7:30</span>
-    <p class="kick">지금도 대행 중 · 문찌언니</p>
-    <h1>조회수 0에도<br>돈은<br><span class="g">들어옵니다</span></h1>
-    <p class="sub">업체 영상을 대신 만들어주고<br><b>받는 돈입니다.</b></p>
+    <p class="kick">숏폼 대행 <b>무료 특강</b> · 온라인 라이브</p>
+    <h1>조회수<br>0에도<br>돈은<br><span class="g">들어와요</span></h1>
+    <p class="sub">왕초보도 가능한<br><b>즉시 돈 되는 부업</b></p>
 
     <div class="winrow">
       <div class="win"><span class="who">지난 두 달</span><span class="what"><em>2,230만원</em></span></div>
@@ -1212,8 +1273,6 @@ summary{font-size:1.1875rem}
       <button class="btn" data-cta="hero">무료 특강 신청하기</button>
       <p class="btnsub">참가비 0원 · 오픈채팅방 정원 마감 시 조기 종료</p>
     </div>
-
-    <img class="hero-cut" src="assets/photo/cutout.webp" alt="문찌언니" width="900" height="881" loading="lazy">
   </div>
 </header>
 
@@ -1221,16 +1280,17 @@ summary{font-size:1.1875rem}
   <div class="sec-inner">
     <p class="lab">2026년 7~8월, 두 달 동안</p>
     <p class="num gl-w">2,230<span>만원</span></p>
-    <p class="sub">일곱 곳에서 받았습니다.<br><b>조회수는 한 번도 신경 쓰지 않았습니다.</b></p>
+    <p class="sub">일곱 곳에서 받았어요.<br><b>조회수 상관없이, 구독자 모을 필요 없었어요.</b></p>
   </div>
 </section>
 
 <section class="sec dark" data-section="proof_bank" data-order="3">
   <div class="sec-inner rv">
-    <span class="eyebrow">지금도 대행 중 · 문찌언니</span>
-    <h2>저는 숏폼 하나로<br><span class="g">먹고삽니다</span></h2>
+    <span class="eyebrow">지금도 대행 중</span>
+    <h2>과거의 영광이<br><span class="g">아닙니다</span></h2>
+    <img class="in-cut" src="assets/photo/cutout.webp" alt="문찌언니" width="900" height="881" loading="lazy">
     <p class="lead" style="color:#fff;font-weight:900">
-      몇 년 전에 벌었던 얘기가 아닙니다.<br>지난 두 달 통장을 그대로 엽니다.
+      몇 년 전에 벌었던 얘기가 아니에요.<br>지난 두 달 통장을 그대로 열게요.
     </p>
     <div class="bankgrid">
       <img src="assets/bank_3.png" alt="7월 22일 500만원" loading="lazy" width="1100" height="355">
@@ -1249,44 +1309,39 @@ summary{font-size:1.1875rem}
     <figure class="ev">
       <span class="pill">계약서 원문</span>
       <img src="assets/contract_wedding.png" alt="웨딩업체 계약서" loading="lazy" width="985" height="690">
-      <figcaption class="ev-label">편당 8만원짜리 25편<br><em>이 한 장이 월 100만원입니다</em></figcaption>
+      <figcaption class="ev-label">편당 8만원짜리 25편<br><em>이 한 장이 월 100만원이에요</em></figcaption>
     </figure>
 
-    <div class="sns">
-      <div class="sn ig"><img class="bg" src="assets/ico/instagram.png" alt=""><span class="k">8곳</span><span class="v">인스타그램 대행</span></div>
-      <div class="sn yt"><img class="bg" src="assets/ico/youtube.png" alt=""><span class="k">7곳</span><span class="v">유튜브 대행</span></div>
-      <div class="sn tt"><img class="bg" src="assets/ico/tiktok.png" alt=""><span class="k">120+</span><span class="v">누적 운영 채널</span></div>
-    </div>
 
     <div class="note">
-      위 통장 날짜, 전부 <b>지난달과 이번 달</b>입니다.<br>
-      예전에 통했던 방법이 아니라<br><b>지금 통하는 방법</b>을 말씀드릴 수 있는 이유입니다.
+      위 통장 날짜, 전부 <b>지난달과 이번 달</b>이에요.<br>
+      예전에 통했던 방법 말고<br><b>지금 통하는 방법</b>을 알려드릴 수 있는 이유예요.
     </div>
 
     <p class="lead" style="margin-top:1.5rem">
       여기까지 오는 데 숏폼 <b>500개</b>를 만들었고,<br>
-      채널 <b>120곳</b>을 대신 운영했습니다.
+      채널 <b>120곳</b>을 대신 운영했어요.
     </p>
 
-    <p class="bridge dark-b">이 통장이 제 얘기로만 끝나면,<br>보실 이유가 없습니다.</p>
+    <p class="bridge dark-b">근데 제 얘기로만 끝나면<br>보실 이유가 없죠.</p>
   </div>
 </section>
 
 <section class="sec" data-section="math" data-order="4">
   <div class="sec-inner rv">
-    <span class="eyebrow">아무도 안 적어두는 것</span>
-    <h2>영상 한 편에<br><span class="g">얼마 받는지</span><br>적어둡니다</h2>
+    <span class="eyebrow">날 것 그대로</span>
+    <h2>영상 한 편에<br><span class="g">얼마 받는지</span><br>다 까볼게요</h2>
     <p class="lead">
-      이 일에서 제일 궁금한 건 하나입니다.<br>
-      <b>영상 한 편에 얼마를 받느냐.</b>
+      제일 궁금한 거 하나죠.<br>
+      <b>영상 한 편에 얼마 받느냐.</b>
     </p>
     <p class="lead">
-      그런데 그게 적힌 데가 없습니다.<br>
-      "일감이 많다"까지는 어디나 말합니다.<br>
-      값을 적어두는 데는 못 봤습니다.
+      근데 이걸 적어둔 데가 없어요.<br>
+      "일감 많다"까지는 다들 말하는데<br>
+      값은 아무도 안 적어둬요.
     </p>
     <p class="lead" style="font-weight:900;color:var(--ink)">
-      제가 지금 받고 있는 값 그대로 적었습니다.
+      제가 지금 받는 값, 그대로 적었어요.
     </p>
     <div class="tbl-scroll">
       <table class="calc">
@@ -1300,38 +1355,40 @@ summary{font-size:1.1875rem}
       </table>
     </div>
 
-    <img class="gfx" src="assets/gfx/pace.jpg" alt="2~3일에 하나씩 만들면 됩니다" loading="lazy" width="1100" height="1480">
+    <div class="hourbox">
+      <p class="hb-t">업체 하나당<br><b>1주일에 딱 하루, 1~2시간</b></p>
+      <p class="hb-num">시급 <span>20만원</span></p>
+    </div>
 
     <p class="lead" style="font-weight:900;color:var(--ink)">
-      위 표는 제가 이번 달에<br>실제로 청구한 값입니다.
+      위 표는 제가 이번 달에<br>실제로 청구한 값이에요.
     </p>
     <p class="lead">
-      <b>표만 보면 못 받습니다.</b><br>
-      왜 8만원이고 왜 25만원인지,<br>
-      그 기준은 그날 열어드립니다.
+      그런데 똑같은 방법으로 영상을 만들어도<br>
+      어떤 건 <b>2~3만원</b>, 어떤 곳은 <b>8~10만원</b>을 받아요.<br>
+      그 기준, 무료강의에서 전부 알려드릴게요.
     </p>
 
     <p class="q-big bk">그럼 2,230만원은<br>어떻게 나온 걸까요?</p>
     <p class="lead">
-      한 건이 아닙니다.<br>
-      <b>편당 8만원짜리 계약이 모인 것</b>입니다.
+      한 건이 아니에요.<br>
+      <b>편당 8만원짜리 계약이 모인 거예요.</b>
     </p>
     <p class="lead">
-      앞에서 보신 계약서, 편당 8만원에 25편입니다.<br>
-      이런 계약 한 장이 한 달 100만원입니다.<br>
-      저는 그걸 <strong>일곱 개</strong> 돌렸습니다.
+      아까 보신 계약서, 편당 8만원에 25편이죠.<br>
+      이런 계약 한 장이 한 달 100만원이에요.<br>
+      저는 그걸 <strong>일곱 개</strong> 돌린 거고요.
     </p>
-    <p class="money-note">한 개면 100만원.<br>아이 학원비와 생활비가 해결되는 금액입니다.</p>
-    <p class="bridge">그럼 그 한 개는 어디서 오느냐.</p>
+    <p class="money-note">한 개면 100만원.<br>아이 학원비랑 생활비가 해결되는 금액이에요.</p>
   </div>
 </section>
 
 <section class="sec" data-section="what" data-order="5">
   <div class="sec-inner rv">
-    <span class="eyebrow">이게 무슨 일인지부터</span>
-    <h2>채널을 키우실<br>필요가 없습니다</h2>
+    <span class="eyebrow">부업 처음이면</span>
+    <h2>대행으로<br><span class="g">시작하세요</span></h2>
     <p class="lead">
-      업체 영상을 대신 만들어주고<br>돈을 받으시면 됩니다.<br>구독자도 팔로워도 없어도 됩니다.
+      업체 영상을 대신 만들어주고<br>돈을 받으면 돼요.<br>구독자도 팔로워도 없어도 되고요.
     </p>
 
     <img class="gfx" src="assets/gfx/flow.jpg" alt="일이 들어와서 돈이 들어오기까지 5단계" loading="lazy" width="1100" height="1251">
@@ -1342,41 +1399,26 @@ summary{font-size:1.1875rem}
       <figcaption class="ev-label">계약서 보내고 확인받는 중<br><em>이 대화 뒤에 200만원 입금</em></figcaption>
     </figure>
 
-    <p class="lead" style="margin-top:2rem;font-weight:900;color:var(--ink)">
-      실제로 납품한 영상입니다.
-    </p>
-    <div class="reels">
-      <a class="reel" href="https://www.instagram.com/reel/DIxR8Pvo9cF/" target="_blank" rel="noopener"
-         data-cta="reel_1" aria-label="납품한 숏폼 1 인스타그램에서 보기">
-        <span class="rl-play" aria-hidden="true"></span>
-        <span class="rl-cap">납품 영상 ①</span>
-      </a>
-      <a class="reel" href="https://www.instagram.com/reel/DZw5VMfgsBp/" target="_blank" rel="noopener"
-         data-cta="reel_2" aria-label="납품한 숏폼 2 인스타그램에서 보기">
-        <span class="rl-play" aria-hidden="true"></span>
-        <span class="rl-cap">납품 영상 ②</span>
-      </a>
-    </div>
-    <p class="reel-note">업체 계정에 올라가 있는 영상입니다. 눌러서 보실 수 있습니다.</p>
 
     <!-- ★ 다리⑤ 위험 제거 — 초보가 대행을 먼저 해야 하는 이유 -->
-    <p class="q-big bk">터지면 더 받나요?</p>
-    <p class="lead" style="font-weight:900;color:var(--ink)">
-      영상이 터져도, 조회수가 0이어도<br>받는 돈은 같습니다.
+    <p class="lead" style="margin-top:2rem;font-weight:900;color:var(--ink)">
+      영상이 터져도, 조회수가 0이어도<br>받는 돈은 똑같아요.
     </p>
     <p class="lead">
-      내 채널을 키우는 건 나중에 하셔도 됩니다.<br>
-      물론 하실 수 있습니다.<br>
-      다만 처음부터 그러지는 마세요.<br>
-      될지 안 될지 모르는 걸 몇 달 버텨야 합니다.
+      내 채널 키우는 건 나중에 하셔도 돼요.<br>
+      물론 하실 수 있고요.<br>
+      다만 처음부터 그러진 마세요.<br>
+      될지 안 될지 모르는 걸 몇 달 버텨야 하거든요.
     </p>
     <div class="note">
-      대행은 반대입니다.<br>
-      <b>계약이 먼저고 돈이 먼저입니다.</b><br>
-      돈을 받으면서 숏폼에 발을 들이는 겁니다.
+      <b>대행은 계약이 먼저고, 돈을 먼저 받아요.</b><br>
+      돈을 받으면서 숏폼에 발을 들이는 거죠.
     </div>
 
-    <p class="bridge">왜 업체가 남한테 맡길까요.</p>
+    <div class="qwrap">
+      <img class="q-ico" src="assets/ico3d/bulb_dynamic.png" alt="" loading="lazy" width="240" height="240">
+      <p class="q-big">근데 업체는<br>왜 남한테 맡길까요?</p>
+    </div>
   </div>
 </section>
 
@@ -1386,51 +1428,49 @@ summary{font-size:1.1875rem}
   <img class="obj s1" src="assets/ico3d/mobile_dynamic.png" alt="" loading="lazy">
   <img class="obj main" src="assets/ico3d/megaphone_dynamic.png" alt="" loading="lazy">
   <div class="po-in rv">
-    <h2 class="po-t">영상 만들 사람을<br><span class="g">찾고 있습니다</span></h2>
-    <p class="po-sub">사장님은 찍을 줄 모르고<br>대행사는 너무 비쌉니다.<br><br>저도 그 틈에서 시작했습니다.</p>
+    <h2 class="po-t">이제 마케팅의 기본은<br><span class="g">동영상입니다</span></h2>
+    <p class="po-sub">사장님은 찍을 줄 모르고<br>대행사는 너무 비싸요.<br><br>저도 그 틈에서 시작했어요.</p>
   </div>
 </section>
 
 <section class="sec soft" data-section="story" data-order="7">
   <div class="sec-inner rv">
-    <span class="eyebrow">저도 여기서 시작했습니다</span>
-    <h2>치킨집을 접고 나니<br><span class="g">남은 게 없었습니다</span></h2>
+    <span class="eyebrow">저도 처음엔 그랬어요</span>
+    <h2>저도 시작할 땐<br><span class="g">영상 하나도 몰랐어요</span></h2>
 
     <p class="lead">
-      13년을 가르쳤습니다.<br>
-      대치동에서 입시 영어를 했습니다.
+      13년 동안 영어강사로 일했어요.<br>
+      돈을 더 벌어보려고<br>치킨집을 차렸고, 낚시터 사업도 했고요.
     </p>
     <p class="lead">
-      그러다 치킨집을 차렸습니다.<br>
-      프랜차이즈였습니다.<br>
-      잘 될 줄 알았는데 안 됐습니다.<br>
-      정리하고 나니 남은 게 없었습니다.
+      그런데 사업이 안 됐어요.<br>
+      남은 건 <b>빚이랑, 부양해야 할 쌍둥이</b>였어요.
     </p>
 
     <div class="voice">
-      <p class="v-txt">쌍둥이를 키우면서,<br>다음 달이 무서웠습니다.</p>
+      <p class="v-txt">불어나는 빚에,<br>쌍둥이를 키우며,<br>매일 숨막히는 하루였어요.</p>
       <div class="v-who"><img src="assets/instructor_face.png" alt="" width="440" height="440" loading="lazy">문찌언니</div>
     </div>
 
     <p class="lead" style="font-weight:900;color:var(--ink)">
-      돈 들이지 않고 할 수 있는 걸 찾았습니다.
+      모아둔 돈이 떨어지고,<br>돈 없이도 할 수 있는 걸 찾았어요.
     </p>
     <p class="lead">
-      쇼핑쇼츠도 해봤고<br>시니어 유튜브도 해봤습니다.<br>
-      채널이 정지된 적도 있습니다.<br>
-      한 번에 된 건 하나도 없었습니다.
+      쇼핑쇼츠도 해봤고<br>시니어 유튜브도 해봤어요.<br>
+      채널이 정지된 적도 있고요.<br>
+      한 번에 된 건 하나도 없었어요.
     </p>
 
     <p class="lead" style="margin-top:1.5rem;font-weight:900;color:var(--ink)">
-      그러다 방향을 바꿨습니다.
+      그러다 방향을 바꿨어요.
     </p>
     <p class="lead">
       내 채널을 키우는 대신,<br>
-      남의 영상을 대신 만들어주고<br>처음으로 돈을 받았습니다.<br>
-      <b>조회수를 신경 쓸 필요가 없다는 걸<br>그때 알았습니다.</b>
+      남의 영상을 대신 만들어주고<br>처음으로 돈을 받았어요.<br>
+      <b>조회수를 신경 쓸 필요가 없다는 걸<br>그때 알았어요.</b>
     </p>
 
-    <p class="lead" style="margin-top:1.5rem">지금 제가 가진 건<br>전부 그때 깨진 자리에<br>하나씩 세운 것들입니다.</p>
+    <p class="lead" style="margin-top:1.5rem">지금 제가 가진 건<br>전부 그때 깨진 자리에<br>하나씩 세운 것들이에요.</p>
     <div class="tbl-scroll">
       <table>
         <thead><tr><th>그때 깨진 것</th><th>그래서 만든 것</th></tr></thead>
@@ -1450,44 +1490,44 @@ summary{font-size:1.1875rem}
 <section class="sec" data-section="after_life" data-order="8">
   <div class="sec-inner rv">
     <span class="eyebrow">그리고 지금은</span>
-    <h2>출근 시간을<br><span class="g">제가 정합니다</span></h2>
+    <h2>출근 시간을<br><span class="g">제가 정해요</span></h2>
 
     <figure class="ev">
       <img src="assets/photo/now_desk.webp" alt="사무실에서 작업 중인 문찌언니" loading="lazy" width="578" height="815">
-      <figcaption class="ev-label">지금 일하는 자리입니다<br><em>오늘 뭘 할지도 제가 정합니다</em></figcaption>
+      <figcaption class="ev-label">지금 일하는 자리예요<br><em>오늘 뭘 할지도 제가 정하고요</em></figcaption>
     </figure>
 
     <p class="lead">
-      아이들과 보내는 시간이 생겼습니다.<br>
-      무엇보다, 제 자신을 다시 믿게 됐습니다.
+      아이들과 보내는 시간이 생겼어요.<br>
+      무엇보다, 제 자신을 다시 믿게 됐고요.
     </p>
 
     <div class="photo2">
       <img src="assets/photo/now_family1.webp" alt="아이들과 보낸 하루" loading="lazy" width="640" height="831">
       <img src="assets/photo/now_family2.webp" alt="아이들과 보낸 하루" loading="lazy" width="640" height="1138">
     </div>
-    <p class="reel-note">평일 낮에 아이들과 나온 날입니다.</p>
+    <p class="reel-note">평일 낮에 아이들과 나온 날이에요.</p>
 
-    <div class="note">돈보다 이게 먼저 바뀌었습니다.</div>
-    <p class="bridge">그럼 이런 생각이 드실 겁니다.</p>
+    <div class="note">돈보다 이게 먼저 바뀌었어요.</div>
+    <p class="bridge">여기서 이런 생각 드시죠.</p>
   </div>
 </section>
 
 <section class="sec dark" data-section="rebuttal" data-order="9">
   <div class="sec-inner">
-    <p class="ask">여기까지 보시면<br>이런 생각이 드실 겁니다.</p>
-    <h2 class="big-q">"강사니까<br>잘한 거<br>아니에요?"</h2>
+    <p class="ask">여기까지 보시면<br>이런 생각 드실 거예요.</p>
+    <h2 class="q-big">"강사니까<br>잘한 거<br>아니에요?"</h2>
     <p class="lead">
-      그러면 위에 계신 분들은요.<br>워킹맘도, 50대 주부도, 지게차 기사도<br>저를 만나기 전엔<br>숏폼을 만져본 적이 없습니다.
+      그럼 위에 계신 분들은요?<br>워킹맘도, 50대 주부도, 지게차 기사님도<br>저 만나기 전엔<br>숏폼 만져본 적도 없었어요.
     </p>
-    <p class="bridge dark-b">저도 처음부터 이랬던 건 아닙니다.</p>
+    <p class="bridge dark-b">저도 처음부터 이랬던 건 아니거든요.</p>
   </div>
 </section>
 
 <section class="sec" data-section="reviews" data-order="10">
   <div class="sec-inner rv">
     <span class="eyebrow">먼저 시작한 분들</span>
-    <h2>먼저 하신 분들<br><span class="g">이야기입니다</span></h2>
+    <h2>먼저 하신 분들<br><span class="g">이야기예요</span></h2>
     <div class="reviews">
       <figure class="ev">
         <span class="pill">30대 워킹맘</span>
@@ -1525,7 +1565,7 @@ summary{font-size:1.1875rem}
       위 성과는 실제 수강생 사례이며 본인 동의를 받아 게시했습니다. 개인정보는 가렸습니다.
       개인의 성과는 투입 시간과 실행 정도에 따라 달라질 수 있으며, 동일한 결과를 보장하지 않습니다.
     </p>
-    <p class="bridge">여기서 제일 많이 걸리는 게 편집입니다.</p>
+    <p class="bridge">여기서 제일 많이 걸리는 게 편집이에요.</p>
   </div>
 </section>
 
@@ -1536,26 +1576,26 @@ summary{font-size:1.1875rem}
     <p class="q-big">편집을 어디까지<br>해야 할까요?</p>
     <img class="p-ico top" src="assets/ico3d/video-cam_dynamic.png" alt="">
 
-    <p class="p-lab ok bk">이 정도면 됩니다</p>
+    <p class="p-lab ok bk">이 정도면 돼요</p>
     <ul class="biglist">
       <li>쓸데없는 부분 자르기</li>
       <li>자막 넣기</li>
       <li>배경음 깔기</li>
       <li>로고 붙이기</li>
     </ul>
-    <div class="bubble dark">휴대폰 앱으로 하실 수 있습니다</div>
+    <div class="bubble dark">휴대폰 앱으로 하실 수 있어요</div>
 
-    <p class="p-lab off bk">여기까진 안 해도 됩니다</p>
+    <p class="p-lab off bk">여기까진 안 해도 돼요</p>
     <ul class="biglist off">
       <li>색보정</li>
       <li>모션그래픽</li>
       <li>3D·특수효과</li>
       <li>전문 장비 촬영</li>
     </ul>
-    <div class="bubble">필요하면<br>편집자에게 넘기시면 됩니다</div>
+    <div class="bubble">필요하면<br>편집자한테 넘기시면 돼요</div>
 
     <p class="q-big bk">촬영은<br>제가 가야 하나요?</p>
-    <div class="bubble">사장님이 휴대폰으로 찍은 걸<br>받아서 다듬으시면 됩니다</div>
+    <div class="bubble">사장님이 휴대폰으로 찍은 걸<br>받아서 다듬으시면 돼요</div>
   </div>
 </section>
 
@@ -1565,45 +1605,45 @@ summary{font-size:1.1875rem}
   <img class="obj s1" src="assets/ico3d/mobile_front.png" alt="" loading="lazy">
   <img class="obj main" src="assets/ico3d/scissor_dynamic.png" alt="" loading="lazy">
   <div class="po-in rv">
-  <div class="po-bub">전문 프로그램 <span class="hi">필요 없습니다</span></div>
-    <h2 class="po-t">자르고 <u>자막 넣고</u><br>그게 전부입니다</h2>
-    <p class="po-sub">휴대폰 앱으로 하시면 됩니다.</p>
+  <div class="po-bub">전문 프로그램 <span class="hi">필요 없어요</span></div>
+    <h2 class="po-t">자르고 <u>자막 넣고</u><br>그게 전부예요</h2>
+    <p class="po-sub">휴대폰 앱으로 하시면 돼요.</p>
   </div>
 </section>
 
 <section class="sec" data-section="program" data-order="13">
   <div class="sec-inner rv">
     <span class="eyebrow">제가 만든 도구</span>
-    <h2>편집도<br><span class="g">프로그램이 합니다</span></h2>
+    <h2>편집도<br><span class="g">프로그램이 해요</span></h2>
     <p class="lead">
-      대행 일을 하다가<br>제가 쓰려고 만들었습니다.<br>
-      지금은 수강생들이 같이 씁니다.
+      대행 일 하다가<br>제가 쓰려고 만들었어요.<br>
+      지금은 수강생들이 같이 쓰고요.
     </p>
 
     <div class="media">
       <video src="assets/video/program_demo.mp4" poster="assets/video/program_demo.jpg"
              muted loop playsinline preload="none" width="1000" height="562" data-autoplay></video>
-      <span class="cap"><b>숏폼 퀵메이커</b> · 클립과 대본만 넣으면 여기까지 나옵니다</span>
+      <span class="cap"><b>숏폼 퀵메이커</b> · 클립이랑 대본만 넣으면 여기까지 나와요</span>
     </div>
 
     <ul class="proglist">
-      <li>영상 조각과 대본만 넣습니다
-        <span>자막 위치와 타이밍은 알아서 맞춥니다</span>
+      <li>영상 조각이랑 대본만 넣어요
+        <span>자막 위치랑 타이밍은 알아서 맞춰줘요</span>
       </li>
-      <li>말 없는 구간은 알아서 잘라냅니다
-        <span>늘어지는 영상이 안 나옵니다</span>
+      <li>말 없는 구간은 알아서 잘라내요
+        <span>늘어지는 영상이 안 나와요</span>
       </li>
-      <li>확대와 장면 전환도 자동입니다
-        <span>숏폼처럼 보이게 만드는 부분입니다</span>
+      <li>확대랑 장면 전환도 자동이에요
+        <span>숏폼처럼 보이게 만드는 부분이죠</span>
       </li>
-      <li>인터넷 없이 내 컴퓨터에서 돌아갑니다
-        <span>따로 결제할 것도, 설치할 것도 없습니다</span>
+      <li>인터넷 없이 내 컴퓨터에서 돌아가요
+        <span>따로 결제할 것도, 설치할 것도 없어요</span>
       </li>
     </ul>
 
     <div class="note">
-      그날 <b>이 화면을 처음부터 끝까지 열어드립니다.</b><br>
-      영상 하나가 나오는 과정을 그 자리에서 보시게 됩니다.
+      그날 <b>이 화면을 처음부터 끝까지 열어드릴게요.</b><br>
+      영상 하나 나오는 과정을 그 자리에서 보시게 돼요.
     </div>
   </div>
 </section>
@@ -1611,66 +1651,66 @@ summary{font-size:1.1875rem}
 <section class="sec dark" data-section="honest" data-order="14">
   <div class="sec-inner rv">
     <span class="eyebrow">여기서 갈립니다</span>
-    <h2>"편집 몰라도 된다"<br>많이 들으셨을 겁니다</h2>
-    <p class="lead" style="color:#fff;font-weight:900">저는 반대로 말씀드립니다.</p>
+    <h2>"편집 몰라도 된다"<br>많이 들으셨죠?</h2>
+    <p class="lead" style="color:#fff;font-weight:900">저는 반대로 말씀드릴게요.</p>
     <p class="lead">
-      편집을 모르면 <b>견적을 못 냅니다.</b><br>
-      얼마나 걸릴 일인지 모르는데<br>값을 어떻게 매깁니까.
+      편집을 모르면 <b>견적을 못 내요.</b><br>
+      얼마나 걸릴 일인지 모르는데<br>값을 어떻게 매기겠어요.
     </p>
     <p class="lead">
-      편집을 모르면 <b>편집자에게 시키지도 못합니다.</b><br>
+      편집을 모르면 <b>편집자한테 시키지도 못해요.</b><br>
       뭘 고쳐달라고 해야 할지 모르니까요.
     </p>
     <p class="lead">
-      편집을 모르면 <b>고객 말을 못 알아듣습니다.</b><br>
-      "좀 더 시원하게"가<br>무슨 뜻인지 알아야 합니다.
+      편집을 모르면 <b>고객 말을 못 알아들어요.</b><br>
+      "좀 더 시원하게"가<br>무슨 뜻인지는 알아야죠.
     </p>
     <div class="voice">
       <p class="v-txt">
-        아무것도 안 하고 중개만 해서 돈 벌 수 없습니다.<br>
-        둘 다를 할 수 있어야 돈을 법니다.<br>
-        그래야 스스로 설 수 있습니다.
+        아무것도 안 하고 중개만 해서는 돈 못 벌어요.<br>
+        둘 다 할 수 있어야 돈을 법니다.<br>
+        그래야 스스로 설 수 있고요.
       </p>
       <div class="v-who"><img src="assets/instructor_face.png" alt="" width="440" height="440" loading="lazy">문찌언니</div>
     </div>
     <p class="lead" style="color:#fff;font-weight:900;margin-top:1.5rem">
-      그래서 저는 <span class="g">편집부터</span> 가르칩니다.<br>
-      쉬워서가 아니라,<br>그게 끝까지 남는 것이기 때문입니다.
+      그래서 저는 <span class="g">편집부터</span> 가르쳐요.<br>
+      쉬워서가 아니라,<br>그게 끝까지 남는 거니까요.
     </p>
-    <p class="bridge dark-b">그리고 배운 다음이 더 중요합니다.</p>
+    <p class="bridge dark-b">그리고 배운 다음이 더 중요해요.</p>
   </div>
 </section>
 
 <section class="sec" data-section="differentiator" data-order="15">
   <div class="sec-inner rv">
     <span class="eyebrow">왜 이 사람인가</span>
-    <h2>그래서<br><span class="g">나눠줄 일</span>이<br>있습니다</h2>
+    <h2>그래서<br><span class="g">나눠줄 일</span>이<br>있어요</h2>
     <p class="lead">
-      일감은 <b>일을 받는 사람만</b> 나눠줄 수 있습니다.<br>
-      저는 지금도 일을 받습니다.
+      일감은 <b>일을 받는 사람만</b> 나눠줄 수 있어요.<br>
+      저는 지금도 일을 받고 있고요.
     </p>
     <p class="lead">
-      그래서 "어디서 일을 구하나요"라는 질문에<br>
-      제가 이번 달에 받은 경로를<br>그대로 열 수 있습니다.
+      그래서 "일은 어디서 구해요?" 물으시면<br>
+      제가 이번 달에 받은 경로를<br>그대로 열어드릴 수 있어요.
     </p>
     <div class="voice">
       <p class="v-txt">일단 첨엔 일을 주고,<br>그다음엔 일을 하게끔 도와줍니다.</p>
       <div class="v-who"><img src="assets/instructor_face.png" alt="" width="440" height="440" loading="lazy">문찌언니가 수강생에게 늘 하는 말</div>
     </div>
     <p class="lead">
-      혼자 다 만들면 몸이 갈려나갑니다.<br>
-      제가 쓰는 편집자들이 있고,<br>일을 받아 넘기는 방식이 있습니다.<br>
-      <b>그런 구조로 돌아간다는 것까지<br>그날 보여드립니다.</b>
+      혼자 다 만들면 몸이 갈려나가요.<br>
+      제가 쓰는 편집자들이 있고,<br>일을 받아 넘기는 방식이 있어요.<br>
+      <b>그런 구조로 돌아간다는 것까지<br>그날 보여드릴게요.</b>
     </p>
 
     <figure class="ev mug">
       <img src="assets/photo/mug.webp" alt="수강생들이 만들어 준 컵" loading="lazy" width="691" height="673">
-      <figcaption class="ev-label">수강생들이 만들어 준 컵입니다</figcaption>
+      <figcaption class="ev-label">수강생들이 만들어 준 컵이에요</figcaption>
     </figure>
 
     <div class="note mini">
-      일이 <b>어디서 오는지, 어떻게 받는지</b>를<br>그날 다 말씀드립니다.<br>
-      제가 지금 쓰는 경로 그대로입니다.
+      일이 <b>어디서 오는지, 어떻게 받는지</b><br>그날 다 알려드릴게요.<br>
+      제가 지금 쓰는 경로 그대로요.
     </div>
   </div>
 </section>
@@ -1678,20 +1718,20 @@ summary{font-size:1.1875rem}
 <section class="sec dark" data-section="curriculum" data-order="16">
   <div class="sec-inner rv">
     <span class="eyebrow">9월 15일, 그날</span>
-    <h2>아껴두는 것<br><span class="g">없습니다</span></h2>
+    <h2>아껴두는 것<br><span class="g">없어요</span></h2>
     <p class="lead">
       돈이 어디서 어떻게 들어오는지<br>
-      그 구조를 그날 통째로 엽니다.
+      그 구조를 그날 통째로 열게요.
     </p>
     <div class="steps">
-      <div class="stp"><span class="n">1</span><div><div class="t">이번 달 일이 어디서 왔는지</div><div class="d">어떤 업체가 어떤 경로로 연락해왔는지. 주고받은 대화를 통째로 엽니다.</div></div></div>
-      <div class="stp"><span class="n">2</span><div><div class="t">업체에 먼저 연락하는 방법</div><div class="d">기다리지 않고 제가 직접 따낼 때 쓰는 방식. 보내는 문구까지 그대로 보여드립니다.</div></div></div>
-      <div class="stp"><span class="n">3</span><div><div class="t">견적을 어떻게 냈는지</div><div class="d">왜 8만원이고 왜 25만원인지. 이 기준은 여기 안 적어뒀습니다.</div></div></div>
-      <div class="stp"><span class="n">4</span><div><div class="t">납품한 영상을 직접 보여드립니다</div><div class="d">"이 정도면 된다"는 선을 눈으로 확인하시면 편집 걱정이 사라집니다.</div></div></div>
+      <div class="stp"><span class="n">1</span><div><div class="t">이번 달 일이 어디서 왔는지</div><div class="d">어떤 업체가 어떤 경로로 연락해왔는지, 주고받은 대화를 통째로 열게요.</div></div></div>
+      <div class="stp"><span class="n">2</span><div><div class="t">업체에 먼저 연락하는 방법</div><div class="d">기다리지 않고 제가 직접 따낼 때 쓰는 방식. 보내는 문구까지 그대로 보여드려요.</div></div></div>
+      <div class="stp"><span class="n">3</span><div><div class="t">견적을 어떻게 냈는지</div><div class="d">왜 8만원이고 왜 25만원인지. 이 기준은 여기 안 적어뒀어요.</div></div></div>
+      <div class="stp"><span class="n">4</span><div><div class="t">납품한 영상을 직접 보여드려요</div><div class="d">"이 정도면 된다"는 선을 눈으로 보시면 편집 걱정이 사라져요.</div></div></div>
     </div>
     <div class="note">
-      <b>다음에 알려드릴게요, 하는 거 없습니다.</b><br>
-      하루면 됩니다. 끝나는 시간도 정해두지 않았습니다.
+      <b>다음에 알려드릴게요, 하는 거 없어요.</b><br>
+      하루면 됩니다. 끝나는 시간도 안 정해뒀어요!
     </div>
     <div class="mobile-form" style="margin-top:1.75rem">
       <button class="btn" data-cta="curriculum">무료 특강 신청하기</button>
@@ -1716,35 +1756,35 @@ summary{font-size:1.1875rem}
 <section class="sec pale" data-section="benefit" data-order="17">
   <div class="sec-inner rv">
     <span class="eyebrow">9월 15일 참석하시면</span>
-    <h2>그날 오신 분께만<br><span class="g">드립니다</span></h2>
+    <h2>이 3가지<br><span class="g">가져가세요</span></h2>
 
     <div class="gifts">
       <div class="gift">
         <span class="gn">01</span>
         <div>
           <b>업체 제안서 템플릿 2종</b>
-          <p>제가 실제로 보내는 문서 그대로입니다.<br>이름만 바꿔서 동네 병원·상점에 보내시면 됩니다</p>
+          <p>제가 실제로 보내는 문서 그대로예요.<br>이름만 바꿔서 동네 병원·상점에 보내시면 돼요</p>
         </div>
       </div>
       <div class="gift">
         <span class="gn">02</span>
         <div>
           <b>캡컷 기초 가이드</b>
-          <p>편집을 한 번도 안 해보셨어도 됩니다.<br>자르고 붙이고 자막 넣는 것까지 순서대로</p>
+          <p>편집 한 번도 안 해보셨어도 돼요.<br>자르고 붙이고 자막 넣는 것까지 순서대로</p>
         </div>
       </div>
       <div class="gift">
         <span class="gn">03</span>
         <div>
           <b>영상 기획 프롬프트</b>
-          <p>뭘 찍을지 막힐 때 그대로 붙여넣으시면 됩니다.<br>업체 업종만 바꾸면 대본이 나옵니다</p>
+          <p>뭘 찍을지 막힐 때 그대로 붙여넣으시면 돼요.<br>업체 업종만 바꾸면 대본이 나와요</p>
         </div>
       </div>
     </div>
 
     <p class="gift-note">
-      셋 다 제가 지금 일하면서 쓰고 있는 것 그대로입니다.<br>
-      <b>다시보기는 없습니다.</b> 그날 오셔야 받으실 수 있습니다.
+      셋 다 제가 지금 일하면서 쓰는 것 그대로예요.<br>
+      <b>그날 오신 분께 드릴게요!</b>
     </p>
     <p class="disclaimer" style="margin-top:1rem">※ 제공 자료는 확정 전이며 변경될 수 있습니다.</p>
   </div>
@@ -1756,9 +1796,9 @@ summary{font-size:1.1875rem}
     <div class="now">
       <p class="now-lab">지금</p>
       <p class="now-txt">
-        월급날이 와도 남는 게 없습니다.<br>
-        아이 때문에 나가서 일하기도 어렵습니다.<br>
-        뭐라도 해야 하는데 뭘 해야 할지 모르겠습니다.
+        월급날이 와도 남는 게 없어요.<br>
+        아이 때문에 나가서 일하기도 어렵고요.<br>
+        뭐라도 해야 하는데 뭘 해야 할지 모르겠어요.
       </p>
     </div>
 
@@ -1767,24 +1807,24 @@ summary{font-size:1.1875rem}
     <div class="then">
       <p class="then-lab">3개월 뒤</p>
       <p class="then-txt">
-        업체 두 곳과 계약이 되어 있습니다.<br>
-        아이 재우고 두 시간, 영상 하나를 만듭니다.<br>
-        <b>통장에 매달 200만원이 들어옵니다.</b>
+        업체 두 곳과 계약이 되어 있어요.<br>
+        아이 재우고 두 시간, 영상 하나 만들고요.<br>
+        <b>통장에 매달 200만원이 들어와요.</b>
       </p>
-      <p class="then-sub">위에 계신 분들이 실제로 지나온 길입니다.</p>
+      <p class="then-sub">위에 계신 분들이 실제로 지나온 길이에요.</p>
     </div>
 
     <h3 class="bk">그래서 이런 분은 오세요</h3>
     <ul class="points">
-      <li><span class="pn">01</span><div><b>월급만으로 부족하신 분</b><br>지금 일을 그만두지 않고 하나 더 만들고 싶은 경우</div></li>
-      <li><span class="pn">02</span><div><b>아이 때문에 밖에 나가기 어려운 분</b><br>집에서, 아이 자는 시간에 할 수 있습니다</div></li>
-      <li><span class="pn">03</span><div><b>노후가 막막한 분</b><br>나이가 걸림돌이 아닌 몇 안 되는 일입니다</div></li>
+      <li><span class="pn">01</span><div><b>월급만으로 부족하신 분</b><br>지금 일 그만두지 않고 하나 더 만들고 싶다면</div></li>
+      <li><span class="pn">02</span><div><b>아이 때문에 밖에 나가기 어려운 분</b><br>집에서, 아이 자는 시간에 하실 수 있어요</div></li>
+      <li><span class="pn">03</span><div><b>노후가 막막한 분</b><br>나이가 걸림돌이 아닌 몇 안 되는 일이에요</div></li>
     </ul>
 
     <h3 class="bk">반대로 이런 분은 안 오셔도 됩니다</h3>
     <div class="stack">
       <div class="card"><div class="q">듣기만 하고 아무것도 안 하실 분</div></div>
-      <div class="card"><div class="q">버튼 한 번 누르면 알아서 돈이 들어온다고 믿으시는 분</div></div>
+      <div class="card"><div class="q">버튼 한 번에 돈이 들어온다고 믿으시는 분</div></div>
     </div>
   </div>
 </section>
@@ -1794,29 +1834,28 @@ summary{font-size:1.1875rem}
     <span class="eyebrow">자주 묻는 질문</span>
     <h2>많이 묻는 것들</h2>
     <div style="border-top:1px solid var(--rule);margin-top:1.15rem">
-      <details><summary>영상 하나도 못 하는데 되나요</summary><div class="ans">못 하시는 분들 오시라고 만든 강의입니다. 위에 있는 수강생들 전부 숏폼을 처음 만져본 분들입니다.</div></details>
-      <details><summary>촬영은 제가 가야 하나요</summary><div class="ans">대부분 업체가 찍어서 보내줍니다. 사장님이 휴대폰으로 찍은 영상을 받아 다듬는 경우가 많습니다. 직접 가는 건 단가가 높은 계약일 때입니다.</div></details>
-      <details><summary>60대인데 늦은 거 아닌가요</summary><div class="ans">오히려 연륜이 있으면 낫습니다. 기술은 일부일 뿐이고, 결국 사람을 상대하는 일입니다. 50대 중반 주부 수강생도 한 달 만에 150만원을 만들었습니다.</div></details>
-      <details><summary>하루에 얼마나 걸리나요</summary><div class="ans">계약 한 건이 보통 2~3일에 영상 하나 만드는 속도입니다. 익숙해지면 한 편에 두세 시간이면 됩니다.</div></details>
-      <details><summary>일은 어디서 구하나요</summary><div class="ans">그날 다 알려드립니다. 제가 실제로 일을 받는 경로와, 업체에 먼저 연락하는 방법까지 그대로 공개합니다.</div></details>
-      <details><summary>요즘 AI가 다 하는데 오래갈까요</summary><div class="ans">AI가 못 하는 게 사람을 연결하고 설득하는 일입니다. 그게 이 일의 핵심입니다.</div></details>
-      <details><summary>휴대폰으로 들어도 되나요</summary><div class="ans">노트북이나 컴퓨터로 들어오셔야 합니다. 제 화면을 같이 보면서 진행하는 부분이 많아서, 휴대폰으로는 글씨가 작아 따라오기 어렵습니다.</div></details>
-      <details><summary>몇 시에 끝나나요</summary><div class="ans">저녁 7시 30분에 시작합니다. 끝나는 시간은 정해두지 않았습니다. 질문이 남아 있으면 답을 다 드리고 마칩니다. 그날 저녁은 넉넉히 비워두시는 게 좋습니다.</div></details>
-      <details><summary>녹화본을 나중에 볼 수 있나요</summary><div class="ans">없습니다. 온라인 라이브로 그날만 진행합니다. 자료 3종도 그날 오신 분께 드립니다.</div></details>
-      <details><summary>정말 무료인가요</summary><div class="ans">네. 신청비도 없고 결제 단계도 없습니다. 그날 오시면 자료 3종까지 받아 가십니다.</div></details>
+      <details><summary>영상 하나도 못 하는데 되나요</summary><div class="ans">못 하시는 분들 오시라고 만든 강의예요. 위에 있는 수강생들 전부 숏폼 처음 만져본 분들이고요.</div></details>
+      <details><summary>촬영은 제가 가야 하나요</summary><div class="ans">대부분 업체가 찍어서 보내줘요. 사장님이 휴대폰으로 찍은 영상을 받아 다듬는 경우가 많고요. 직접 가는 건 단가 높은 계약일 때예요.</div></details>
+      <details><summary>60대인데 늦은 거 아닌가요</summary><div class="ans">오히려 연륜 있으면 나아요. 기술은 일부일 뿐이고, 결국 사람 상대하는 일이거든요. 50대 중반 주부 수강생도 한 달 만에 150만원 만드셨어요.</div></details>
+      <details><summary>하루에 얼마나 걸리나요</summary><div class="ans">업체 하나당 일주일에 하루, 1~2시간이면 돼요. 익숙해지면 한 편에 두세 시간이면 나와요.</div></details>
+      <details><summary>일은 어디서 구하나요</summary><div class="ans">그날 다 알려드릴게요. 제가 실제로 일 받는 경로랑, 업체에 먼저 연락하는 방법까지 그대로 열어요.</div></details>
+      <details><summary>요즘 AI가 다 하는데 오래갈까요</summary><div class="ans">AI가 못 하는 게 사람 연결하고 설득하는 일이에요. 그게 이 일의 핵심이고요.</div></details>
+      <details><summary>휴대폰으로 들어도 되나요</summary><div class="ans">노트북이나 컴퓨터로 들어오셔야 해요. 제 화면 같이 보면서 진행하는 부분이 많아서, 휴대폰으론 글씨가 작아 따라오기 어려워요.</div></details>
+      <details><summary>몇 시에 끝나나요</summary><div class="ans">저녁 7시 30분에 시작해요. 끝나는 시간은 안 정해뒀어요. 질문 남아 있으면 답 다 드리고 마칩니다. 그날 저녁은 넉넉히 비워두세요!</div></details>
+      <details><summary>정말 무료인가요</summary><div class="ans">네! 신청비도 없고 결제 단계도 없어요. 그날 오시면 자료 3종까지 받아 가세요.</div></details>
     </div>
   </div>
 </section>
 
 <section class="sec dark mobile-form" id="apply" data-section="form_bottom" data-order="20">
   <div class="sec-inner">
-    <p class="closing">9월 15일 저녁 7시 30분.<br><span class="g">그날 저녁을 비워두세요.</span></p>
-    <h2>그날 이후에<br>시작하셔도 됩니다</h2>
-    <p class="lead" style="margin-bottom:1.35rem">듣고 나서 아니다 싶으면<br>안 하시면 됩니다.<br>대신 뭘 안 하는 건지는 아시게 됩니다.</p>
+    <p class="closing">9월 15일 저녁 7시 30분.<br><span class="g">그날 저녁을 비워두세요!</span></p>
+    <h2>그날 이후에<br>시작하셔도 돼요</h2>
+    <p class="lead" style="margin-bottom:1.35rem">듣고 나서 아니다 싶으면<br>안 하시면 돼요.<br>대신 뭘 안 하는 건지는 아시게 될 거예요.</p>
     <div class="formcard" id="formcard-bottom">
       <h3>무료 특강 신청</h3>
       <p class="fdesc" data-schedule>온라인 라이브</p>
-      <p class="need">💻 <b>노트북이나 컴퓨터</b>로 들어오셔야 합니다. 휴대폰으로는 따라오기 어렵습니다.</p>
+      <p class="need">💻 <b>노트북이나 컴퓨터</b>로 들어오셔야 해요. 휴대폰으론 따라오기 어려워요.</p>
       <form class="applyForm" data-form="bottom" novalidate>
         <div class="field f-name">
           <label>이름 <span class="req">*</span></label>
@@ -1847,7 +1886,7 @@ summary{font-size:1.1875rem}
         <button type="submit" class="btn" data-cta="form_bottom">신청하고 자리 확보하기</button>
       </form>
       <div class="done">
-        <div class="big">신청이 접수됐습니다</div>
+        <div class="big">신청이 접수됐어요!</div>
         <p>잠시 후 안내 페이지로 이동합니다.<br>넘어가지 않으면 <a href="https://open.kakao.com/o/gx23uXKi" target="_blank" rel="noopener" data-openchat>오픈채팅방 바로가기</a>를 눌러주세요.</p>
       </div>
     </div>
@@ -1866,7 +1905,7 @@ summary{font-size:1.1875rem}
       </div>
       <h3>무료 특강 신청</h3>
       <p class="fdesc" data-schedule>온라인 라이브</p>
-      <p class="need">💻 <b>노트북이나 컴퓨터</b>로 들어오셔야 합니다. 휴대폰으로는 따라오기 어렵습니다.</p>
+      <p class="need">💻 <b>노트북이나 컴퓨터</b>로 들어오셔야 해요. 휴대폰으론 따라오기 어려워요.</p>
       <form class="applyForm" data-form="top" novalidate>
         <div class="field f-name">
           <label>이름 <span class="req">*</span></label>
@@ -1897,7 +1936,7 @@ summary{font-size:1.1875rem}
         <button type="submit" class="btn" data-cta="form_top">신청하고 자리 확보하기</button>
       </form>
       <div class="done">
-        <div class="big">신청이 접수됐습니다</div>
+        <div class="big">신청이 접수됐어요!</div>
         <p>잠시 후 안내 페이지로 이동합니다.<br>넘어가지 않으면 <a href="https://open.kakao.com/o/gx23uXKi" target="_blank" rel="noopener" data-openchat>오픈채팅방 바로가기</a>를 눌러주세요.</p>
       </div>
     </div>
@@ -1907,7 +1946,6 @@ summary{font-size:1.1875rem}
 <footer>
   <div class="sec-inner">
     매니샵 · 대표 문지영 · 사업자등록번호 351-65-00566<br>
-    경기도 남양주시 별내3로 322, 4층 404호<br>
     문의 nany418@naver.com
     <p style="margin-top:1rem;font-size:1rem;line-height:1.6;color:#6B6B6B">
       본 페이지에 게시된 수익·성과는 실제 사례이며, 개인의 성과는 노력과 환경에 따라 달라질 수 있습니다.
