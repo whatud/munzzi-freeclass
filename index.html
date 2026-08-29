@@ -1925,16 +1925,11 @@ summary{font-size:1.1875rem}
           </div>
           <div class="err">연락처를 정확히 입력해 주세요.</div>
         </div>
-        <div class="field f-age">
-          <label>나이대 <span class="req">*</span></label>
-          <select name="age"><option value="">선택해 주세요</option><option>20대</option><option>30대</option><option>40대</option><option>50대</option><option>60대 이상</option></select>
-          <div class="err">나이대를 선택해 주세요.</div>
-        </div>
         <div class="agree">
           <div class="all"><input type="checkbox" class="agree-all" id="agAll-bottom"><label for="agAll-bottom">전체 동의하기</label></div>
           <div class="row"><input type="checkbox" class="ag req" id="ag1-bottom"><label for="ag1-bottom"><span class="tag">[필수]</span> 개인정보 수집·이용 동의</label></div>
           <div class="row"><input type="checkbox" class="ag req" id="ag2-bottom"><label for="ag2-bottom"><span class="tag">[필수]</span> 특강 안내 문자·카카오톡 수신 동의</label></div>
-          <p class="agree-note">수집 항목은 이름·연락처·나이대이며, 특강 안내 목적으로만 사용하고 특강 종료 후 3개월 안에 파기합니다.</p>
+          <p class="agree-note">수집 항목은 이름·연락처이며, 특강 안내 목적으로만 사용하고 특강 종료 후 3개월 안에 파기합니다.</p>
           <div class="err agree-err">필수 항목에 동의해 주세요.</div>
         </div>
         <button type="submit" class="btn" data-cta="form_bottom">신청하고 자리 확보하기</button>
@@ -1974,16 +1969,11 @@ summary{font-size:1.1875rem}
           </div>
           <div class="err">연락처를 정확히 입력해 주세요.</div>
         </div>
-        <div class="field f-age">
-          <label>나이대 <span class="req">*</span></label>
-          <select name="age"><option value="">선택해 주세요</option><option>20대</option><option>30대</option><option>40대</option><option>50대</option><option>60대 이상</option></select>
-          <div class="err">나이대를 선택해 주세요.</div>
-        </div>
         <div class="agree">
           <div class="all"><input type="checkbox" class="agree-all" id="agAll-top"><label for="agAll-top">전체 동의하기</label></div>
           <div class="row"><input type="checkbox" class="ag req" id="ag1-top"><label for="ag1-top"><span class="tag">[필수]</span> 개인정보 수집·이용 동의</label></div>
           <div class="row"><input type="checkbox" class="ag req" id="ag2-top"><label for="ag2-top"><span class="tag">[필수]</span> 문자·카카오톡 수신 동의</label></div>
-          <p class="agree-note">이름·연락처·나이대를 특강 안내 목적으로만 사용하고 종료 후 3개월 안에 파기합니다.</p>
+          <p class="agree-note">이름·연락처를 특강 안내 목적으로만 사용하고 종료 후 3개월 안에 파기합니다.</p>
           <div class="err agree-err">필수 항목에 동의해 주세요.</div>
         </div>
         <button type="submit" class="btn" data-cta="form_top">신청하고 자리 확보하기</button>
@@ -2281,19 +2271,17 @@ summary{font-size:1.1875rem}
       var p1=form.querySelector('select[name=p1]').value;
       var p2=form.querySelector('input[name=p2]').value.trim();
       var p3=form.querySelector('input[name=p3]').value.trim();
-      var age=form.querySelector('select[name=age]').value;
       var agreed=$$('.ag.req',card).every(function(a){ return a.checked; });
 
-      var bName=name.length<2, bPhone=!(p2.length>=3&&p3.length===4), bAge=!age;
-      bad('.f-name',bName); bad('.f-phone',bPhone); bad('.f-age',bAge);
+      var bName=name.length<2, bPhone=!(p2.length>=3&&p3.length===4);
+      bad('.f-name',bName); bad('.f-phone',bPhone);
       card.querySelector('.agree-err').style.display = agreed?'none':'block';
 
-      if(bName||bPhone||bAge||!agreed){
-        var field=bName?'name':(bPhone?'phone':(bAge?'age':'agreement'));
+      if(bName||bPhone||!agreed){
+        var field=bName?'name':(bPhone?'phone':'agreement');
         track('form_error',{error_field:field, form_location:where});
         (bName?form.querySelector('input[name=name]')
           :bPhone?form.querySelector('input[name=p2]')
-          :bAge?form.querySelector('select[name=age]')
           :card.querySelector('.ag')).focus();
         return;
       }
@@ -2302,13 +2290,13 @@ summary{font-size:1.1875rem}
       btn.disabled=true; btn.textContent='접수 중입니다';
 
       var payload=Object.assign({
-        name:name, phone:p1+'-'+p2+'-'+p3, age:age,
+        name:name, phone:p1+'-'+p2+'-'+p3,
         agree_privacy:'Y', agree_marketing:'Y',
         form_location:where, submitted_at:new Date().toISOString()
       }, attribution());
 
       function success(){
-        track('sign_up',{method:'landing_form', age_group:age, form_location:where});
+        track('sign_up',{method:'landing_form', form_location:where});
         /* 이동이 막히거나 느릴 때를 대비해 인라인 완료 문구도 함께 띄운다 */
         form.style.display='none'; doneBox.style.display='block';
         card.scrollIntoView({behavior:'auto', block:'center'});
