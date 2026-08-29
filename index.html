@@ -171,8 +171,20 @@ strong{font-weight:900}
   position:relative;font-size:.9375rem;font-weight:900;color:#8B8B8B;
   letter-spacing:-.03em;margin-bottom:.4rem;
 }
-/* 인물 누끼 — CTA 아래 띠. 히어로 바닥에 걸쳐 배경으로 사라지게 */
+/* 히어로 인물 — 우측에 세우고 글자가 위로 지나간다.
+   단, 얼굴(이미지 위쪽 1/3)은 어떤 텍스트도 덮지 않게 위치를 잡는다. */
 .hero .wrap{position:relative;z-index:2}
+.hero-face{
+  position:absolute;z-index:1;pointer-events:none;user-select:none;
+  right:-3.25rem;top:3.25rem;width:12.5rem;height:auto;
+  filter:drop-shadow(0 0 26px rgba(3,199,90,.22)) drop-shadow(0 10px 30px rgba(0,0,0,.5));
+  -webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 93%);
+          mask-image:linear-gradient(180deg,#000 62%,transparent 93%);
+  animation:facein .9s ease .2s both;
+}
+@keyframes facein{from{opacity:0;transform:translateX(1.5rem)}to{opacity:1;transform:none}}
+@media (min-width:480px){ .hero-face{right:-1.5rem;width:14rem} }
+@media (min-width:768px){ .hero-face{right:1rem;top:4rem;width:17rem} }
 .hero-cut{
   display:block;width:min(66%,15.5rem);height:auto;
   margin:.75rem auto -2.75rem;pointer-events:none;user-select:none;
@@ -1238,6 +1250,10 @@ summary{font-size:1.1875rem}
     padding:0;
   }
   .hero h1{font-size:5rem}
+  /* 인물을 본문 컬럼(42rem) 오른쪽 끝에 붙인다.
+     기본값인 화면 우측 기준으로 두면 고정 신청폼 뒤로 들어가 얼굴이 가린다.
+     본문 우측 끝 = 50% - 34rem + 42rem = 50% + 8rem → 우측 여백 = 50% - 8rem */
+  .hero-face{right:calc(50% - 8rem);top:5rem;width:19rem}
   /* 포스터 섹션도 같은 축으로. 가운데 정렬이면 본문과 어긋나 보인다 */
   .po .po-in{
     max-width:42rem;
@@ -1257,6 +1273,7 @@ summary{font-size:1.1875rem}
 <!-- 01 히어로 -->
 <header class="hero" data-section="hero" data-order="1">
   <span class="glow"></span>
+  <img class="hero-face" src="assets/photo/hero_profile.webp" alt="문찌언니" width="560" height="940" fetchpriority="high">
   <div class="wrap">
     <span class="eye" data-date-badge>9월 15일 (화) 저녁 7:30</span>
     <p class="kick">숏폼 대행 <b>무료 특강</b> · 온라인 라이브</p>
