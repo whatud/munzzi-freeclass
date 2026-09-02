@@ -338,10 +338,11 @@ input:focus,select:focus{outline:0;border-color:var(--naver);box-shadow:0 0 0 3p
 .mega .sub{font-size:1.0625rem;font-weight:700;color:#A8A8A8;line-height:1.6;word-break:keep-all}
 .mega .sub b{color:#fff}
 
-/* ============ 01-b 히어로 하단 유튜브 인터뷰 ============ */
-.ytsec{background:var(--dark);color:#fff;padding:.5rem 0 2.5rem;position:relative;z-index:1}
-.ytsec .sec-inner{text-align:center}
-.ytwrap{border-radius:18px;overflow:hidden;background:#000;box-shadow:0 14px 34px rgba(0,0,0,.35)}
+/* ============ 유튜브 인터뷰 (mega 섹션 안) ============ */
+.ytwrap{
+  position:relative;z-index:2;border-radius:18px;overflow:hidden;background:#000;
+  box-shadow:0 14px 34px rgba(0,0,0,.35);margin-bottom:2.25rem;
+}
 .ytbox{position:relative;background:#000}
 .ytbox::before{content:"";display:block;padding-top:56.25%}
 .ytbox iframe,.ytbox .ytfacade{position:absolute;inset:0;width:100%;height:100%;border:0}
@@ -358,13 +359,8 @@ input:focus,select:focus{outline:0;border-color:var(--naver);box-shadow:0 0 0 3p
   content:"";width:0;height:0;margin-left:.3rem;
   border-left:1.25rem solid #00220F;border-top:.8rem solid transparent;border-bottom:.8rem solid transparent;
 }
-.ytcap{
-  display:block;background:var(--dark-2);color:#A8A8A8;
-  font-size:.9375rem;font-weight:700;line-height:1.5;padding:.85rem 1rem;text-align:center;word-break:keep-all;
-}
-.ytcap b{color:#fff}
 @media (min-width:768px){
-  .ytsec{padding:1rem 0 3.25rem}
+  .ytwrap{margin-bottom:2.75rem}
   .ytfacade .play{width:5rem;height:5rem}
 }
 
@@ -1337,9 +1333,9 @@ summary{font-size:1.1875rem}
   </div>
 </header>
 
-<!-- 01-b 유튜브 인터뷰 (뉴머니 채널 출연분) -->
-<section class="ytsec" data-section="yt_interview" data-order="1.5">
+<section class="mega" data-section="mega" data-order="2">
   <div class="sec-inner">
+    <!-- 유튜브 인터뷰 (뉴머니 채널 출연분) -->
     <div class="ytwrap">
       <div class="ytbox">
         <button type="button" class="ytfacade" id="ytFacade" aria-label="문찌언니 인터뷰 영상 재생">
@@ -1348,29 +1344,7 @@ summary{font-size:1.1875rem}
           <span class="play" aria-hidden="true"></span>
         </button>
       </div>
-      <span class="ytcap">17분이면 <b>무슨 일인지 감이 와요</b></span>
     </div>
-  </div>
-</section>
-<script>
-(function(){
-  var b = document.getElementById('ytFacade');
-  if(!b) return;
-  b.addEventListener('click', function(){
-    var f = document.createElement('iframe');
-    f.src = 'https://www.youtube-nocookie.com/embed/R-74qowiHpk?autoplay=1&rel=0&modestbranding=1&playsinline=1';
-    f.title = '문찌언니 인터뷰 영상';
-    f.setAttribute('frameborder','0');
-    f.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-    f.setAttribute('allowfullscreen','');
-    b.parentNode.replaceChild(f, b);
-    if(window.gtag) window.gtag('event','video_play',{video_id:'R-74qowiHpk', section_name:'yt_interview'});
-  });
-})();
-</script>
-
-<section class="mega" data-section="mega" data-order="2">
-  <div class="sec-inner">
     <p class="lab">2026년 7~8월, 두 달 동안</p>
     <p class="num gl-w">2,230<span>만원</span></p>
     <p class="sub">일곱 곳에서 받았어요.<br><b>조회수 상관없이, 구독자 모을 필요 없었어요.</b></p>
@@ -2391,6 +2365,51 @@ summary{font-size:1.1875rem}
       success();
     });
   });
+
+  /* ---- 유튜브 인터뷰 영상: 노출 · 재생 클릭 측정 ----
+     클릭률 = video_play ÷ video_impression (같은 기간, 같은 사용자 기준) */
+  (function(){
+    var VID = 'R-74qowiHpk', VTITLE = '뉴머니 인터뷰';
+    var b = $('#ytFacade');
+    if(!b) return;
+    var wrap = b.closest('.ytwrap');
+
+    /* 노출: 영상이 화면에 절반 이상 들어온 첫 순간 1회 (클릭률의 분모) */
+    if(window.IntersectionObserver && wrap){
+      var seen = false;
+      var vio = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(!e.isIntersecting || seen) return;
+          seen = true;
+          track('video_impression',{video_id:VID, video_title:VTITLE, video_provider:'youtube'});
+          vio.disconnect();
+        });
+      }, {threshold:.5});
+      vio.observe(wrap);
+    }
+
+    /* 재생 클릭: 썸네일을 진짜 iframe 으로 바꾸는 순간 1회 (클릭률의 분자) */
+    b.addEventListener('click', function(){
+      track('video_play',{video_id:VID, video_title:VTITLE, video_provider:'youtube'});
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + VID +
+              '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+      f.title = '문찌언니 인터뷰 영상';
+      f.setAttribute('frameborder','0');
+      f.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      f.setAttribute('allowfullscreen','');
+      b.parentNode.replaceChild(f, b);
+
+      /* 재생 후 체류: 10초 · 30초 지점까지 페이지에 남아 있었는지 (대충 본 건지 구분용) */
+      [10, 30].forEach(function(sec){
+        setTimeout(function(){
+          if(document.visibilityState === 'visible'){
+            track('video_progress',{video_id:VID, video_title:VTITLE, elapsed_sec:sec});
+          }
+        }, sec * 1000);
+      });
+    });
+  })();
 
   onScroll();
 })();
