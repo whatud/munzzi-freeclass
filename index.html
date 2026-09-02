@@ -338,6 +338,46 @@ input:focus,select:focus{outline:0;border-color:var(--naver);box-shadow:0 0 0 3p
 .mega .sub{font-size:1.0625rem;font-weight:700;color:#A8A8A8;line-height:1.6;word-break:keep-all}
 .mega .sub b{color:#fff}
 
+/* ============ 01-b 히어로 하단 유튜브 인터뷰 ============ */
+.ytsec{background:var(--dark);color:#fff;padding:1.75rem 0 3rem;position:relative;z-index:1}
+.ytsec .sec-inner{text-align:center}
+.ytsec .eyebrow{color:#00341A;background:var(--naver);margin-bottom:.85rem}
+.ytsec h2{
+  font-family:var(--title);font-size:1.75rem;line-height:1.3;letter-spacing:-.04em;
+  color:#fff;word-break:keep-all;margin-bottom:.55rem;
+}
+.ytsec h2 .g{color:var(--naver)}
+.ytsec .ytlead{font-size:1rem;font-weight:700;color:#A8A8A8;line-height:1.6;word-break:keep-all;margin-bottom:1.25rem}
+.ytsec .ytlead b{color:#fff}
+.ytwrap{border-radius:18px;overflow:hidden;background:#000;box-shadow:0 14px 34px rgba(0,0,0,.35)}
+.ytbox{position:relative;background:#000}
+.ytbox::before{content:"";display:block;padding-top:56.25%}
+.ytbox iframe,.ytbox .ytfacade{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ytfacade{display:block;padding:0;margin:0;cursor:pointer;background:#000;-webkit-appearance:none;appearance:none}
+.ytfacade img{width:100%;height:100%;object-fit:cover;display:block;opacity:.9;transition:opacity .2s ease}
+.ytfacade:hover img,.ytfacade:focus-visible img{opacity:1}
+.ytfacade .play{
+  position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);
+  width:4.25rem;height:4.25rem;border-radius:50%;background:var(--naver);
+  display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.45);transition:transform .18s ease;
+}
+.ytfacade:hover .play{transform:translate(-50%,-50%) scale(1.07)}
+.ytfacade .play::after{
+  content:"";width:0;height:0;margin-left:.3rem;
+  border-left:1.25rem solid #00220F;border-top:.8rem solid transparent;border-bottom:.8rem solid transparent;
+}
+.ytcap{
+  display:block;background:var(--dark-2);color:#A8A8A8;
+  font-size:.9375rem;font-weight:700;line-height:1.5;padding:.85rem 1rem;text-align:center;word-break:keep-all;
+}
+.ytcap b{color:#fff}
+@media (min-width:768px){
+  .ytsec{padding:2.5rem 0 3.75rem}
+  .ytsec h2{font-size:2.125rem}
+  .ytsec .ytlead{font-size:1.0625rem}
+  .ytfacade .play{width:5rem;height:5rem}
+}
+
 /* ============ ⑤ 섹션 전환 그라디언트 ============ */
 .sec.dark, .slab, .mega{position:relative}
 .sec.dark::before, .slab::before{
@@ -1306,6 +1346,41 @@ summary{font-size:1.1875rem}
     </div>
   </div>
 </header>
+
+<!-- 01-b 유튜브 인터뷰 (뉴머니 채널 출연분) -->
+<section class="ytsec" data-section="yt_interview" data-order="1.5">
+  <div class="sec-inner">
+    <span class="eyebrow">유튜브 '뉴머니' 출연</span>
+    <h2>어떻게 벌었는지<br><span class="g">영상에 다 있어요</span></h2>
+    <p class="ytlead">부업 채널 뉴머니에서 <b>통장 내역과 작업 화면까지</b> 그대로 열었어요.</p>
+    <div class="ytwrap">
+      <div class="ytbox">
+        <button type="button" class="ytfacade" id="ytFacade" aria-label="문찌언니 인터뷰 영상 재생">
+          <img src="https://i.ytimg.com/vi/R-74qowiHpk/maxresdefault.jpg"
+               alt="문찌언니 인터뷰 영상 미리보기" width="1280" height="720" loading="lazy">
+          <span class="play" aria-hidden="true"></span>
+        </button>
+      </div>
+      <span class="ytcap">17분이면 <b>무슨 일인지 감이 와요</b></span>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var b = document.getElementById('ytFacade');
+  if(!b) return;
+  b.addEventListener('click', function(){
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/R-74qowiHpk?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+    f.title = '문찌언니 인터뷰 영상';
+    f.setAttribute('frameborder','0');
+    f.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+    f.setAttribute('allowfullscreen','');
+    b.parentNode.replaceChild(f, b);
+    if(window.gtag) window.gtag('event','video_play',{video_id:'R-74qowiHpk', section_name:'yt_interview'});
+  });
+})();
+</script>
 
 <section class="mega" data-section="mega" data-order="2">
   <div class="sec-inner">
